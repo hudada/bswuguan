@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8"></meta>
+<title th:text="${title}"></title>
+<!-- Bootstrap -->
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"
+	media="screen" />
+<link th:href="@{/css/bootstrap-responsive.min.css}" rel="stylesheet"
+	media="screen" />
+<link th:href="@{/css/styles.css}" rel="stylesheet" media="screen" />
+</head>
+
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="btn btn-navbar" data-toggle="collapse"
+					data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span>
+				</a> <a class="brand" th:text="${title}"></a>
+				<div class="nav-collapse collapse">
+					<ul class="nav pull-right">
+						<li class="dropdown"><a th:inline="text" href="#"
+							role="button" class="dropdown-toggle" data-toggle="dropdown">
+								<i class="icon-user"></i>你好，[[${name}]]<i class="caret"></i>
+
+						</a>
+							<ul class="dropdown-menu">
+								<li class="divider"></li>
+								<li><a tabindex="-1" href="/logout">退出登录</a></li>
+							</ul></li>
+					</ul>
+					<ul class="nav">
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span3" id="sidebar">
+				<ul id="ul_left"
+					class="nav nav-list bs-docs-sidenav nav-collapse collapse">
+				</ul>
+			</div>
+			<!--/span-->
+			<div class="span9" id="content">
+				<!-- validation -->
+				<div class="row-fluid">
+					<!-- block -->
+					<div class="block">
+						<div class="navbar navbar-inner block-header">
+							<div class="muted pull-left">新增燃气费记录</div>
+						</div>
+						<div class="block-content collapse in">
+							<div class="span12">
+								<!-- BEGIN FORM-->
+								<form action="#" id="form_sample_1" class="form-horizontal">
+									<fieldset>
+
+
+										<div class="control-group">
+											<label class="control-label" for="focusedInput">缴费业主账号</label>
+											<div class="controls">
+												<select id="slt_name" class="span6 m-wrap">
+													<option th:each="user:${list}" th:inline="text">[[${user.number}]]
+														([[${user.dong}]]栋-[[${user.dan}]]单元-[[${user.hao}]]号)</option>
+												</select>
+											</div>
+										</div>
+
+										<div class="control-group">
+											<label class="control-label" for="focusedInput">金额(元)</label>
+											<div class="controls">
+												<input class="input-xlarge focused"
+													onkeyup="value=value.replace(/[^\d]/g,'')" id="ipt_price"
+													type="text" placeholder="请输入金额" />
+											</div>
+										</div>
+
+
+										<div class="form-actions">
+											<button onclick="btn_cancel()" type="button" class="btn">取&nbsp;&nbsp;&nbsp;&nbsp;消</button>
+											<button type="button" onclick="return btn_ok()"
+												class="btn btn-primary">添&nbsp;&nbsp;&nbsp;&nbsp;加</button>
+										</div>
+									</fieldset>
+								</form>
+								<!-- END FORM-->
+							</div>
+						</div>
+					</div>
+					<!-- /block -->
+				</div>
+				<!-- /validation -->
+
+
+			</div>
+		</div>
+	</div>
+	<!--/.fluid-container-->
+	<link th:href="@{/vendors/datepicker.css}" rel="stylesheet"
+		media="screen" />
+	<link th:href="@{/vendors/uniform.default.css}" rel="stylesheet"
+		media="screen" />
+	<link th:href="@{/vendors/chosen.min.css}" rel="stylesheet"
+		media="screen" />
+
+	<link th:href="@{/vendors/wysiwyg/bootstrap-wysihtml5.css}"
+		rel="stylesheet" media="screen" />
+
+	<script th:src="@{/js/jquery-1.9.1.min.js}"></script>
+	<script th:src="@{/js/bootstrap.min.js}"></script>
+
+	<script th:src="@{/vendors/jquery.uniform.min.js}"></script>
+	<script th:src="@{/vendors/chosen.jquery.min.js}"></script>
+	<script th:src="@{/vendors/bootstrap-datepicker.js}"></script>
+
+	<script th:src="@{/vendors/wysiwyg/wysihtml5-0.3.0.js}"></script>
+	<script th:src="@{/vendors/wysiwyg/bootstrap-wysihtml5.js}"></script>
+
+	<script th:src="@{/vendors/wizard/jquery.bootstrap.wizard.min.js}"></script>
+
+	<script type="text/javascript"
+		th:src="@{/vendors/jquery-validation/dist/jquery.validate.min.js}"></script>
+	<script th:src="@{/assets/form-validation.js}"></script>
+
+	<script th:src="@{/assets/scripts.js}"></script>
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+		jQuery(document).ready(function() {
+			$("#ul_left").html([[${left}]])
+			FormValidation.init();
+		});
+
+		$(function() {
+			$(".datepicker").datepicker();
+			$(".uniform_on").uniform();
+			$(".chzn-select").chosen();
+			$('.textarea').wysihtml5();
+
+			$('#rootwizard').bootstrapWizard(
+					{
+						onTabShow : function(tab, navigation, index) {
+							var $total = navigation.find('li').length;
+							var $current = index + 1;
+							var $percent = ($current / $total) * 100;
+							$('#rootwizard').find('.bar').css({
+								width : $percent + '%'
+							});
+							// If it's the last tab then hide the last button and show the finish instead
+							if ($current >= $total) {
+								$('#rootwizard').find('.pager .next').hide();
+								$('#rootwizard').find('.pager .finish').show();
+								$('#rootwizard').find('.pager .finish')
+										.removeClass('disabled');
+							} else {
+								$('#rootwizard').find('.pager .next').show();
+								$('#rootwizard').find('.pager .finish').hide();
+							}
+						}
+					});
+			$('#rootwizard .finish').click(function() {
+				alert('Finished!, Starting over!');
+				$('#rootwizard').find("a[href*='tab1']").trigger('click');
+			});
+		});
+
+		
+
+		function btn_cancel() {
+			window.location.href = "/record/table";
+		}
+
+		function btn_ok() {
+			
+			var number = $("#slt_name").val();
+			number = $.trim(number.split("(")[0]);
+			
+			var price = $("#ipt_price").val();
+			price = $.trim(price);
+			if (price == "") {
+				alert("金额不能为空")
+				return;
+			}
+
+			var data = '{"number" : "' + number + '","amount":"' + price
+					+ '","type" :"2" }';
+			$.ajax({
+				url : "/page/record/add",
+				type : "POST",
+				datatype : "JSON",
+				contentType : "application/json;charset=utf-8",
+				data : data,
+				success : function(obj) {
+					if (obj.code == 0) {
+						btn_cancel();
+					} else {
+						alert(obj.message);
+					}
+				},
+				error : function() {
+					alert("提交失败！");
+				}
+			});
+		}
+		/*]]>*/
+	</script>
+</body>
+
+</html>

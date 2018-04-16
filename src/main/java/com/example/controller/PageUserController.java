@@ -43,25 +43,8 @@ public class PageUserController {
 	private AccountDao accountDao;
 	private int size = 50;
 
-	@RequestMapping(value = "/table/{page}", method = RequestMethod.GET)
-	public String table(@PathVariable int page,ModelMap map) {
-		Pageable p = new PageRequest(page, size);
-		map.addAttribute("list", userDao.findAll(p));
-		map.addAttribute("page", page);
-		map.addAttribute("sum", 1);
-		return "user/table";
-	}
-
-	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public String addPage() {
-		return "user/add";
-	}
 	
-	@RequestMapping(value = "/edit/{number}", method = RequestMethod.GET)
-	public String editPage(@PathVariable String number,ModelMap map) {
-		map.addAttribute("userBean", userDao.findUserByNumber(number));
-		return "user/edit";
-	}
+	
 
 	// 添加用户
 	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json")

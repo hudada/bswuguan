@@ -45,17 +45,6 @@ public class PagePamentController {
 	@Autowired
 	private UserDao userDao;
 
-	@RequestMapping(value = "/table", method = RequestMethod.GET)
-	public String table(ModelMap map) {
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		List<PamentRecordBean> list = payDao.findOrderByState();
-		for(PamentRecordBean bean:list) {
-			bean.setDate(format.format(new Date(Long.parseLong(bean.getDate()))));
-		}
-		map.addAttribute("list", list);
-		return "pamentRecord/table";
-	}
-
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String addPage(ModelMap map) {
 		map.addAttribute("list",userDao.findAll());

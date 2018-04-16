@@ -1,167 +1,152 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
 <meta charset="utf-8"></meta>
 <style type="text/css">
-table.altrowstable {
-	font-size: 18px;
-	color: #333333;
-	border-width: 1px;
-	border-color: #4f79b0;
-	border-collapse: collapse;
-}
-
-table.altrowstable th {
-	border-width: 1px;
-	padding: 8px;
-	max-width: 600px;
-	min-width: 110px;
-	table-layout: auto;
-	font-family: serif;
-	border-style: solid;
-	border-color: #4f79b0;
-}
-
-table.altrowstable td {
-	border-width: 1px;
-	padding: 8px;
-	border-style: solid;
-	border-color: #4f79b0;
-}
-
-.oddrowcolor {
-	background-color: #d4e3e5;
-}
-
-.evenrowcolor {
-	background-color: #d4e3e5;
-}
-
-a:hover {
-	color: #326f92;
-}
-
-button {
-	font-family: arial, serif;
-	box-sizing: border-box;
+.table th, .table td {
 	text-align: center;
-	font-size: 15px;
-	height: 28px;
-	border-radius: 2px;
-	border: 1px solid #4f79b0;
-	color: #FFFFFF;
-	background-color: #4f79b0;
-	-web-kit-appearance: none;
-	-moz-appearance: none;
-	outline: 0;
-	text-decoration: none;
-	width: 130px;
+	vertical-align: middle !important;
+	max-width: 300px;
 }
 </style>
+<title th:text="${title}"></title>
+<!-- Bootstrap -->
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"
+	media="screen" />
+<link th:href="@{/css/bootstrap-responsive.min.css}" rel="stylesheet"
+	media="screen" />
+<link th:href="@{/css/styles.css}" rel="stylesheet" media="screen" />
 </head>
+
 <body>
-	<div style="margin-top: 30px; margin-left: 50px">
-		<table class="altrowstable" id="alternatecolor">
-			<tr>
-				<th>账号</th>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="btn btn-navbar" data-toggle="collapse"
+					data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span>
+				</a> <a class="brand" th:text="${title}"></a>
+				<div class="nav-collapse collapse">
+					<ul class="nav pull-right">
+						<li class="dropdown">
+						<a th:inline="text" href="#"
+							role="button" class="dropdown-toggle" data-toggle="dropdown">
+								<i class="icon-user"></i>你好，[[${name}]]<i class="caret"></i>
+
+						</a>
+							<ul class="dropdown-menu">
+								<li class="divider"></li>
+								<li><a tabindex="-1" href="/logout">退出登录</a></li>
+							</ul></li>
+					</ul>
+					<ul class="nav">
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span3" id="sidebar">
+				<ul id="ul_left" class="nav nav-list bs-docs-sidenav nav-collapse collapse">
+                    </ul>
+			</div>
+
+			<!--/span-->
+			<div class="span9" id="content">
+				<div class="row-fluid">
+					<div class="alert alert-success">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+						<h4>查询成功！</h4>
+						记录已全部显示...
+					</div>
+				</div>
+				<div class="row-fluid"></div>
+				<div class="row-fluid">
+					<div class="span12">
+						<!-- block -->
+						<div class="block">
+							<div class="navbar navbar-inner block-header">
+								<div class="muted pull-left">用户管理</div>
+								<div class="pull-right">
+									<span th:text="${count0}" class="badge badge-info">10</span>
+
+								</div>
+							</div>
+							<div class="block-content collapse in">
+								<table class="table table-hover .table-condensed"
+									style="word-break: break-all; word-wrap: break-all;">
+									<thead>
+										<tr>
+											<th>账号</th>
 				<th>昵称</th>
 				<th>电话</th>
 				<th>性别</th>
 				<th>栋数</th>
 				<th>单元</th>
 				<th>门牌号</th>
-				<th>操作</th>
-			</tr>
-			<tr th:each="user:${list}">
-				<th th:text="${user.number}">number</th>
+											<th class="span4"></th>
+
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="user:${list}">
+											<th th:text="${user.number}">number</th>
 				<th th:text="${user.name}">name</th>
 				<th th:text="${user.tel}">tel</th>
 				<th th:text="${user.sex} == 1 ? 男 :女">sex</th>
 				<th th:text="${user.Dong}">Dong栋</th>
 				<th th:text="${user.Dan}">Dan单元</th>
 				<th th:text="${user.Hao}">Hao号</th>
-				<th><a th:onclick="'javascript:a_edit(\''+${user.number}+'\')'">修改</a>
-					<a th:onclick="'javascript:a_delete(\''+${user.number}+'\')'">删除</a></th>
-			</tr>
-		</table>
+											<td>
+												<button type="button"
+													class="btn btn-link"
+													th:onclick="'javascript:a_edit(\''+${user.number}+'\')'">修改</button>
+												<button type="button"
+													class="btn btn-link"
+													th:onclick="'javascript:a_delete(\''+${user.number}+'\')'">删除</button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!-- /block -->
+					</div>
+				</div>
+				<div class="row-fluid"></div>
+			</div>
+		</div>
+		<hr />
 	</div>
-	<div id="div_action"
-		style="float: left; margin-top: 30px; margin-left: 50px; width: 500px;">
-		<a onclick="a_pre()" style="float: left;">上一页&nbsp;&nbsp;</a> <label
-			id="lb_page" style="float: left;" ></label> <a
-			onclick="a_next()" style="float: left;">&nbsp;&nbsp;下一页</a>
-		<button onclick="btn_add()" style="float: right;">新增</button>
-	</div>
-
-	<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
-	<script th:inline="javascript" type="text/javascript">
-		var curPage  = /*[[${page}]]*/;
-		function altRows(id) {
-			if (document.getElementsByTagName) {
-
-				var table = document.getElementById(id);
-				var rows = table.getElementsByTagName("tr");
-				for (i = rows.length; i > 0; i--) {
-					$(rows[i]).attr("onmouseover",
-							"this.style.backgroundColor='#ffff66';");
-					$(rows[i]).attr("onmouseout",
-							"this.style.backgroundColor='#d4e3e5';");
-					if (i % 2 == 0) {
-						$(rows[i]).attr("class", "evenrowcolor");
-					} else {
-						$(rows[i]).attr("class", "oddrowcolor");
-					}
-				}
-			}
-		}
-		$(document).ready(function() {
-			altRows('alternatecolor');
-			var tab_w = $("#alternatecolor").width();
-			$("#div_action").css("width", tab_w);
-			
-			var page = parseInt(curPage) + parseInt(1);
-			$("#lb_page").html(page);
+	<!--/.fluid-container-->
+	<script th:src="@{/js/jquery-1.9.1.min.js}"></script>
+	<script th:src="@{/js/bootstrap.min.js}"></script>
+	<script th:inline="javascript">
+        $(document).ready(function() {
+        	$("#ul_left").html([[${left}]])
 		});
-
-		function btn_add() {
+        function btn_add() {
 			window.location.href = "/page/user/add";
 		}
 
 		function a_edit(id) {
-			window.location.href = "/page/user/edit/" + id;
+			window.location.href = "/edit/" + id;
 		}
 		function a_delete(id) {
 			if (confirm("是否确认删除")) {
 				$.get("/page/user/detele/" + id, function(obj) {
 					if (obj.code == 0) {
-						window.location.href = "/page/user/table/0";
+						window.location.href = "/table";
 					} else {
 						alert("删除失败");
 					}
 				});
 			}
 		}
-
-		function a_pre() {
-			var page = $("#lb_page").html();
-			if (page == 1) {
-				alert("当前为第一页")
-				return
-
-			}
-			page = parseInt(curPage) - parseInt(1);
-			window.location.href = "/page/user/table/" + page;
-		}
-
-		function a_next() {
-			var page = $("#lb_page").html();
-			if(page == /*[[${sum}]]*/){
-				alert("当前为最后页")
-				return
-			}
-			page = parseInt(curPage) + parseInt(1);
-			window.location.href = "/page/user/table/" + page;
-		}
 	</script>
 </body>
+
 </html>
