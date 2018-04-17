@@ -46,16 +46,7 @@ public class PageReplyController {
 	@Autowired
 	private ReplyDao replyDao;
 
-	@RequestMapping(value = "/table/{id}", method = RequestMethod.GET)
-	public String table(@PathVariable String id,ModelMap map) {
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		List<ReplyBean> list = replyDao.findReplayByForumId(id);
-		for(ReplyBean bean:list) {
-			bean.setDate(format.format(new Date(Long.parseLong(bean.getDate()))));
-		}
-		map.addAttribute("list", list);
-		return "reply/table";
-	}
+	
 
 	@RequestMapping(value = "/detele/{id}", method = RequestMethod.GET)
 	@ResponseBody

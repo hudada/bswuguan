@@ -24,12 +24,17 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import com.example.bean.AccountBean;
 import com.example.bean.AdminBean;
 import com.example.bean.BaseBean;
+import com.example.bean.ForumAndReplyCount;
+import com.example.bean.ForumBean;
+import com.example.bean.NoticeBean;
 import com.example.bean.PamentRecordBean;
+import com.example.bean.ReplyBean;
 import com.example.bean.UserBean;
 import com.example.dao.AccountDao;
 import com.example.dao.AdminDao;
 import com.example.dao.ForumDao;
 import com.example.dao.NoticeDao;
+import com.example.dao.ReplyDao;
 import com.example.dao.UserDao;
 import com.example.dao.pamentRecordDao;
 import com.example.utils.ResultUtils;
@@ -55,6 +60,8 @@ public class PageLoginController {
 	private NoticeDao noticeDao;
 	@Autowired
 	private ForumDao forumDao;
+	@Autowired
+	private ReplyDao replyDao;
 
 	// 返回登录页面
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -137,11 +144,11 @@ public class PageLoginController {
 					+ "<span class=\"badge badge-info pull-right\">"+noticeDao.count()+"</span>公告</a>"
 				+ "</li>"
 				+ "<li "+isActive(9,position)+">"
-					+ "<a href=\"/userManager\">"
+					+ "<a href=\"/notice/add\">"
 					+ "<i class=\"icon-chevron-right\"></i>新增公告</a>"
 				+ "</li>"
 				+ "<li "+isActive(10,position)+">"
-					+ "<a href=\"/userManager\">"
+					+ "<a href=\"/notice/table\">"
 					+ "<i class=\"icon-chevron-right\"></i>公告管理</a>"
 				+ "</li>"
 				+ "<li>"
@@ -149,7 +156,7 @@ public class PageLoginController {
 					+ "<span class=\"badge badge-info pull-right\">"+forumDao.count()+"</span>论坛</a>"
 				+ "</li>"
 				+ "<li "+isActive(11,position)+">"
-					+ "<a href=\"/userManager\">"
+					+ "<a href=\"/forum/table\">"
 					+ "<i class=\"icon-chevron-right\"></i>论坛管理</a>"
 				+ "</li>");
 		return map;
@@ -227,5 +234,66 @@ public class PageLoginController {
 		}
 		map.addAttribute("list", list);
 		return "pamentRecord/table";
+	}
+	
+	@RequestMapping(value = "/notice/add", method = RequestMethod.GET)
+	public String addPage(ModelMap map, HttpSession session) {
+		getPub(map, session,9);
+		return "notice/add";
+	}
+	
+	@RequestMapping(value = "/notice/edit/{id}", method = RequestMethod.GET)
+	public String noticeEditPage(@PathVariable String id,ModelMap map
+			, HttpSession session) {
+		getPub(map, session,10);
+		map.addAttribute("noticeBean", noticeDao.findOne(Long.parseLong(id)));
+		return "notice/edit";
+	}
+	
+	@RequestMapping(value = "/notice/table", method = RequestMethod.GET)
+	public String noticeTable(ModelMap map, HttpSession session) {
+		getPub(map, session,10);
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		List<NoticeBean> list = noticeDao.findAll();
+		for(NoticeBean bean:list) {
+			bean.setDate(format.format(new Date(Long.parseLong(bean.getDate()))));
+		}
+		map.addAttribute("list", list);
+		return "notice/table";
+	}
+	
+	@RequestMapping(value = "/forum/table", method = RequestMethod.GET)
+	public String forumTable(ModelMap map, HttpSession session) {
+		getPub(map, session,11);
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		List<ForumAndReplyCount> result = new ArrayList<>();
+		List<ForumBean> forums=forumDao.findAll();
+		for (ForumBean forumBean : forums) {
+			ForumAndReplyCount forumAndReplyCount = new ForumAndReplyCount();
+			forumAndReplyCount.setId(forumBean.getId());
+			forumAndReplyCount.setTitle(forumBean.getTitle());
+			forumAndReplyCount.setInfo(forumBean.getInfo());
+			forumAndReplyCount.setNumber(forumBean.getNumber());
+			forumAndReplyCount.setDate(format.format(new Date(Long.parseLong(forumBean.getDate()))));
+			forumAndReplyCount.setState(forumBean.getState());
+			int count = replyDao.findCountByForumId(forumBean.getId()+"");
+			forumAndReplyCount.setCount(count);
+			result.add(forumAndReplyCount);
+		}
+		map.addAttribute("list", result);
+		return "forum/table";
+	}
+	
+	@RequestMapping(value = "/reply/table/{id}", method = RequestMethod.GET)
+	public String replyTable(@PathVariable String id,ModelMap map
+			, HttpSession session) {
+		getPub(map, session,11);
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		List<ReplyBean> list = replyDao.findReplayByForumId(id);
+		for(ReplyBean bean:list) {
+			bean.setDate(format.format(new Date(Long.parseLong(bean.getDate()))));
+		}
+		map.addAttribute("list", list);
+		return "reply/table";
 	}
 }

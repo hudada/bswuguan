@@ -42,29 +42,6 @@ public class PageNoticeController {
 	@Autowired		
 	private NoticeDao noticeDao;
 
-	// 返回用户表信息
-	@RequestMapping(value = "/table", method = RequestMethod.GET)
-	public String table(ModelMap map) {
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		List<NoticeBean> list = noticeDao.findAll();
-		for(NoticeBean bean:list) {
-			bean.setDate(format.format(new Date(Long.parseLong(bean.getDate()))));
-		}
-		map.addAttribute("list", list);
-		return "notice/table";
-	}
-
-	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public String addPage() {
-		return "notice/add";
-	}
-	
-	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-	public String editPage(@PathVariable String id,ModelMap map) {
-		map.addAttribute("noticeBean", noticeDao.findOne(Long.parseLong(id)));
-		return "notice/edit";
-	}
-
 	@RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public BaseBean<NoticeBean> addUser(@RequestBody NoticeBean noticeBean) {

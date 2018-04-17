@@ -78,7 +78,6 @@
 			data : '{"adminCode" : "' + name + '","pwd" :"' + pwd + '" }',
 			success : function(obj) {
 				if (obj.code == 0) {
-					alert(obj.message);
 					window.location.href = "/";
 				} else {
 					alert(obj.message);

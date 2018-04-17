@@ -48,26 +48,6 @@ public class PageForumController {
 	@Autowired
 	private ReplyDao replyDao;
 
-	@RequestMapping(value = "/table", method = RequestMethod.GET)
-	public String table(ModelMap map) {
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		List<ForumAndReplyCount> result = new ArrayList<>();
-		List<ForumBean> forums=forumDao.findAll();
-		for (ForumBean forumBean : forums) {
-			ForumAndReplyCount forumAndReplyCount = new ForumAndReplyCount();
-			forumAndReplyCount.setId(forumBean.getId());
-			forumAndReplyCount.setTitle(forumBean.getTitle());
-			forumAndReplyCount.setInfo(forumBean.getInfo());
-			forumAndReplyCount.setNumber(forumBean.getNumber());
-			forumAndReplyCount.setDate(format.format(new Date(Long.parseLong(forumBean.getDate()))));
-			forumAndReplyCount.setState(forumBean.getState());
-			int count = replyDao.findCountByForumId(forumBean.getId()+"");
-			forumAndReplyCount.setCount(count);
-			result.add(forumAndReplyCount);
-		}
-		map.addAttribute("list", result);
-		return "forum/table";
-	}
 
 	@RequestMapping(value = "/detele/{id}", method = RequestMethod.GET)
 	@ResponseBody
